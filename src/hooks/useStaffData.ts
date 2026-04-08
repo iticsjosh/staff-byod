@@ -87,14 +87,16 @@ export function useStaffData(): UseStaffDataReturn {
   const deleteStaff = useCallback(
     async (id: string) => {
       try {
-        await apiDeleteStaff(id);
+        // Send the full staff record so N8N can identify the row
+        const staff = staffList.find((s) => s.id === id);
+        await apiDeleteStaff(id, staff ?? undefined);
         setStaffList((prev) => prev.filter((s) => s.id !== id));
       } catch {
         // Optimistic local-only delete when API is unavailable
         setStaffList((prev) => prev.filter((s) => s.id !== id));
       }
     },
-    []
+    [staffList]
   );
 
   return {

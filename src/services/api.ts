@@ -119,10 +119,12 @@ export async function updateStaff(
 /**
  * Delete a staff member.
  */
-export async function deleteStaff(id: string): Promise<void> {
+export async function deleteStaff(id: string, data?: Partial<Staff>): Promise<void> {
   // Using POST instead of DELETE for N8N webhook compatibility
+  // Include full staff record so N8N can identify the row
+  const rawData = data ? mapStaffToRaw(data) : {};
   await request<void>(`${API_POST_URL}?id=${id}`, {
     method: 'POST',
-    body: JSON.stringify({ action: 'delete' })
+    body: JSON.stringify({ ...rawData, action: 'delete' })
   });
 }

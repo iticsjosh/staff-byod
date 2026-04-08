@@ -144,9 +144,20 @@ export default function App() {
       renewal: staff.renewal,
     };
 
-    if (exitCol === 'y2') fullUpdate.y2 = 'exit';
-    else if (exitCol === 'y3') fullUpdate.y3 = 'exit';
-    else if (exitCol === 'y4') fullUpdate.y4 = 'exit';
+    // Set exit on the chosen column and blank out all succeeding columns
+    if (exitCol === 'y2') {
+      fullUpdate.y2 = 'exit';
+      fullUpdate.y3 = '';
+      fullUpdate.y4 = '';
+      fullUpdate.renewal = '';
+    } else if (exitCol === 'y3') {
+      fullUpdate.y3 = 'exit';
+      fullUpdate.y4 = '';
+      fullUpdate.renewal = '';
+    } else if (exitCol === 'y4') {
+      fullUpdate.y4 = 'exit';
+      fullUpdate.renewal = '';
+    }
 
     await updateStaff(staffId, fullUpdate);
     handleUndoExit(staffId);
@@ -178,11 +189,22 @@ export default function App() {
         pendingExitColumn: pendingExit,
       };
 
-      // Apply exit to the correct column for pending (unsaved) exits
-      if (pendingExit === 'y1') displayStaff.y1 = 'exit';
-      else if (pendingExit === 'y2') displayStaff.y2 = 'exit';
-      else if (pendingExit === 'y3') displayStaff.y3 = 'exit';
-      else if (pendingExit === 'y4') displayStaff.y4 = 'exit';
+      // Apply exit to the correct column and blank succeeding columns for preview
+      if (pendingExit === 'y1') {
+        displayStaff.y1 = 'exit';
+        displayStaff.y2 = '';
+        displayStaff.y3 = '';
+        displayStaff.y4 = '';
+      } else if (pendingExit === 'y2') {
+        displayStaff.y2 = 'exit';
+        displayStaff.y3 = '';
+        displayStaff.y4 = '';
+      } else if (pendingExit === 'y3') {
+        displayStaff.y3 = 'exit';
+        displayStaff.y4 = '';
+      } else if (pendingExit === 'y4') {
+        displayStaff.y4 = 'exit';
+      }
 
       const status = getStatus(displayStaff);
 
